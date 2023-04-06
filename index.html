@@ -1,2 +1,582 @@
-<meta http-equiv="refresh" content="0; url=https://fdurca.github.io/HCIFinalProject/public/index.html">
+<!doctype html>
 
+<html lang="en">
+<head>
+  <title>Group 11</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=1200">
+  <script src="https://distill.pub/template.v2.js"></script>
+  <style id="distill-article-specific-styles">
+    .subgrid {
+  grid-column: screen; 
+  display: grid; 
+  grid-template-columns: inherit;
+  grid-template-rows: inherit;
+  grid-column-gap: inherit;
+  grid-row-gap: inherit;
+}
+
+d-figure.base-grid {
+  grid-column: screen;
+  background: hsl(0, 0%, 97%);
+  padding: 20px 0;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+d-figure {
+  margin-bottom: 1em;
+  position: relative;
+}
+
+d-figure > figure {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.shaded-figure {
+  background-color: hsl(0, 0%, 97%);
+  border-top: 1px solid hsla(0, 0%, 0%, 0.1);
+  border-bottom: 1px solid hsla(0, 0%, 0%, 0.1);
+  padding: 30px 0;
+}
+
+.pointer {
+  position: absolute;
+  width: 26px;
+  height: 26px;
+  top: 26px;
+  left: -48px;
+}
+
+div#observablehq {
+  font-family: inherit;
+  font-size: inherit;
+}
+
+button {
+  font-family : inherit;
+  font-size: 1em;
+}
+
+/* Alignment of KaTeX. */
+#gnn-models span.katex-display {
+  margin: 0.5em 0 0.5em 0em;
+}
+
+@media (max-width: 1000px) {
+  d-contents {
+    justify-self: start;
+    align-self: start;
+    grid-column-start: 2;
+    grid-column-end: 6;
+    padding-bottom: 0.5em;
+    margin-bottom: 1em;
+    padding-left: 0.25em;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    border-bottom-color: rgba(0, 0, 0, 0.1);
+  }
+}
+
+@media (min-width: 1000px) {
+  d-contents {
+    align-self: start;
+    grid-column-start: 1;
+    grid-column-end: 4;
+    justify-self: end;
+    padding-right: 3em;
+    padding-left: 2em;
+    border-right: 1px solid rgba(0, 0, 0, 0.1);
+    border-right-width: 1px;
+    border-right-style: solid;
+    border-right-color: rgba(0, 0, 0, 0.1);
+  }
+}
+
+@media (min-width: 1180px) {
+  d-contents {
+    grid-column-start: 1;
+    grid-column-end: 4;
+    justify-self: end;
+    padding-right: 3em;
+    padding-left: 2em;
+    border-right: 1px solid rgba(0, 0, 0, 0.1);
+    border-right-width: 1px;
+    border-right-style: solid;
+    border-right-color: rgba(0, 0, 0, 0.1);
+  }
+}
+
+d-contents nav h3 {
+  margin-top: 0;
+  margin-bottom: 1em;
+}
+
+d-contents nav a {
+  color: rgba(0, 0, 0, 0.8);
+  border-bottom: none;
+  text-decoration: none;
+}
+
+d-contents li {
+  list-style-type: none;
+}
+
+d-contents ul {
+  padding-left: 1em;
+}
+
+d-contents nav ul li {
+  margin-bottom: 0.25em;
+}
+
+d-contents nav a:hover {
+  text-decoration: underline solid rgba(0, 0, 0, 0.6);
+}
+
+d-contents nav ul {
+  margin-top: 0;
+  margin-bottom: 6px;
+}
+
+d-contents nav > div {
+  display: block;
+  outline: none;
+  margin-bottom: 0.5em;
+}
+
+d-contents nav > div > a {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+d-contents nav > div > a:hover, d-contents nav > ul > li > a:hover {
+  text-decoration: none;
+}
+
+input[type="radio"] {
+  vertical-align: unset !important;
+}
+
+.math-details {
+  padding-left: 1em;
+  padding-right: 1em;
+  padding-bottom: 0em;
+  padding-top: 1em;
+  margin-bottom: 1em;
+}
+  </style>
+</head>
+
+<body>
+  
+  <d-front-matter>
+    <script type="text/json">
+      {
+    "title": "Understanding Convolutions on Graphs",
+    "description": "Understanding the building blocks and design choices of graph neural networks.",
+    "authors": [
+        {
+            "author": "Ajith Rahugnanam"
+        },
+        {
+            "author": "Filip Durca"
+        },
+        {
+            "author": "Jaspreet Sandhu"
+        },
+        {
+            "author": "Ryan Cook"
+        } 
+    ],
+    "katex": {
+        "delimiters": [
+            {
+                "left": "$",
+                "right": "$",
+                "display": false
+            },
+            {
+                "left": "$$",
+                "right": "$$",
+                "display": true
+            }
+        ]
+    }
+}
+    </script>
+  </d-front-matter>
+
+  <d-title>
+    <h1>Redesign of cardgames.io</h1>
+    <p>Group 11</p>
+  </d-title>
+
+  <d-article>
+    <d-contents>
+      <nav class="l-text figcaption">
+        <h3>Contents</h3>
+        <div><a href="#introduction">Executive Summary</a></div>
+        <div><a href="#map">Navigational Map</a></div>
+        <div><a href="#principles">Design Principles</a></div>
+        <ul>
+          <li><a href="#p1">Composite Granularity</a></li>
+          <li><a href="#p2">Explicit Affordance</a></li>
+          <li><a href="#p3">User Centered Design</a></li>
+          <li><a href="#p4">Hick’s Law</a></li>
+          <li><a href="#p5">Semiotics</a></li>
+          <li><a href="#p6">Immediate Activation</a></li>
+          <li><a href="#p7">Discrete Flow</a></li>
+          <li><a href="#p8">Positive Transfer</a></li>
+          <li><a href="#p9">Scalability</a></li>
+          <li><a href="#p10">Reducing Negative Transfer</a></li>
+          <li><a href="#p11">Design Language</a></li>
+          <li><a href="#p12">Participatory Design</a></li>
+          <li><a href="#p13">Formative Evaluation</a></li>
+          <li><a href="#p14">Mental Model Activation</a></li>
+          <li><a href="#p15">Responsive Design</a></li>
+          <li><a href="#p16">Mix Mode Interface</a></li>
+          <li><a href="#p17">Diversity Macro Level Interaction</a></li>
+          <li><a href="#p18">Consistency</a></li>
+          <li><a href="#p19">Local Constraint</a></li>
+          <li><a href="#p20">Scalability</a></li>
+          <li><a href="#p21">Visibility</a></li>
+        </ul>
+        <div><a href="#heuristic">Heuristic Evaluation</a></div>
+        <div><a href="#recommendations">Future Recommendations</a></div>
+      </nav>
+    </d-contents>
+    <div>
+      <h2 id="introduction">Executive Summary</h2>
+      <p>
+        Many systems and interactions - social networks, molecules, organizations, citations, physical models, transactions - can be represented quite naturally as graphs.
+        How can we reason about and make predictions within these systems?
+      </p>
+      <p>
+        One idea is to look at tools that have worked well in other domains: neural networks have shown immense predictive power in a variety of learning tasks.
+        However, neural networks have been traditionally used to operate on fixed-size and/or regular-structured inputs (such as sentences, images and video).
+        This makes them unable to elegantly process graph-structured data.
+      </p>
+      <figure id="standard-neural-networks" class="l-page">
+        <img src="images/standard-neural-networks.svg" style="width: 100%;"
+             alt="Neural networks generally operate on fixed-size input vectors. How do we input a graph to a neural network?"
+             title="How do we input a graph to a neural network?">
+      </figure>
+    </div>
+    
+    <p>
+      Graph neural networks (GNNs) are a family of neural networks that can operate naturally on graph-structured data. 
+      By extracting and utilizing features from the underlying graph,
+      GNNs can make more informed predictions about entities in these interactions,
+      as compared to models that consider individual entities in isolation.
+    </p>
+    <p>
+      GNNs are not the only tools available to model graph-structured data:
+      graph kernels <d-cite key="graph-kernels"></d-cite>
+      and random-walk methods <d-cite key="node2vec,deepwalk"></d-cite>
+      were some of the most popular ones.
+      Today, however, GNNs have largely replaced these techniques
+      because of their inherent flexibility to model the underlying systems
+      better.
+    </p>
+    <p>
+      In this article, we will illustrate
+      the challenges of computing over graphs, 
+      describe the origin and design of graph neural networks,
+      and explore the most popular GNN variants in recent times.
+      Particularly, we will see that many of these variants
+      are composed of similar building blocks.
+    </p>
+    <p>
+      First, let's discuss some of the complications that graphs come with.
+    </p>
+
+    <h2 id="map">
+      Navigational Map
+    </h2>
+
+    <h2 id="Design Principles">
+      Design Principles
+    </h2>
+
+    <div id="p1">
+      <h3 id>
+        Composite Granularity
+      </h3>
+      <p>
+        User action for solitaire, sea battles, and spades has been modified to use composite granularity instead of atomic granularity. The option to operate with atomic granularity is still there.
+      </p>
+    </div>
+
+    <div id="p2">
+      <h3>
+        Explicit Affordance
+      </h3>
+      <p>
+        A big thing incorporated in this redesign is the use of explicit affordance. The home button and arrows for the shuffle function are all very intuitive in letting the user know the functionality behind the buttons. There are also small errors indicating a drop-down menu for the filter which also makes use of explicit affordance.      
+      </p>
+    </div>
+
+    <div id="p3">
+      <h3>
+        User Centered Design
+      </h3>
+      <p>
+        As users of cardgames.io, we wanted to redesign the website and make changes that improve the site for the user. As users, we wanted to see more flexible interactions with the game and a cleaner site.
+      </p>
+      <p>
+        Built around making user interactions easier we added:
+        <ul>
+          <li>Keyboard integration for games</li>
+          <li>Touchpad friendly controls</li>
+          <li>Minimalist website design</li>
+          <li>Touchpad friendly controls</li>
+        </ul>
+      </p>
+    </div>
+
+    <div id="p4">
+      <h3>
+        Hick’s Law
+      </h3>
+      <p>
+        This redesign makes use of Hick’s law by limiting the number of options available to the user. Previously, every game was listed on the home page which caused information overloading but filters prevented that. The filter can be done by game type, difficulty, and players. Fewer options mean quicker decision-making for the user. There is also the shuffle option which allows the user to shuffle if they want to try a new game which limits the user to two options (left and right arrow).
+      </p>
+    </div>
+
+    <div id="p5">
+      <h3>
+        Semiotics
+      </h3>
+      <p>
+        
+      </p>
+    </div>
+
+    <div id="p6">
+      <h3>
+        Immediate Activation
+      </h3>
+      <p>
+        The website takes advantage of immediate activation to inform the user about each game with a little description. This description activates once the user hovers over the game. Activation keeps information overload down but provides documentation to the user.
+      </p>
+    </div>
+
+    <div id="p7">
+      <h3>
+        Discrete Flow
+      </h3>
+      <p>
+        With the added one-click functionality in Spider Solitaire, the user is now able to utilize discrete flow through instantaneous actions, while still being able to use the drag controls to demonstrate continuous flow.
+      </p>
+    </div>
+
+    <div id="p8">
+      <h3>
+        Fitts’ Law
+      </h3>
+      <p>
+        By adding keyboard control to Spades, the user can start the game by pressing the enter key situated right next to their right pinky. This greatly reduces the time to start the game because the user is required to move their cursor to the “Enter” button
+      </p>
+    </div>
+
+    <div id="p9">
+      <h3>
+        Positive Transfer
+      </h3>
+      <p>
+        The redesign makes use of positive transfer when allowing the user once click action in solitaire. When investigating other solitaire games, the team realized that one-click action is a common feature among solitaire games. Users will naturally interact with the game using the one-click feature because of positive transfer from other card games. 
+      </p>
+    </div>
+
+    <div id="p10">
+      <h3>
+        Node-Order Equivariance
+      </h3>
+      <p>
+        The original idea to edit cardgames.io was because Filip, Ryan, and some of their friends were consistent users of cardgames.io and felt like it could be improved to reflect HCI’s best practices. While coming up with tasks and fixes to cardgames.io, the team interviewed Filip's and Ryan’s friends to determine what they would like to see modified. These friends were later consulted to get feedback on the redesign. As members who gave their input throughout the project, this project made use of participatory design.
+      </p>
+    </div>
+
+    <div id="p11">
+      <h3>
+        Formative Evaluation
+      </h3>
+      <p>
+        To complete the redesign using an agile methodology, the team used formative evaluation throughout the project. This evaluation was done by team members (user-centered design) and outside members (participatory design). A summative evaluation was done after the implementation of the project.
+      </p>
+    </div>
+
+    <div id="p12">
+      <h3>
+        Mental Model Activation
+      </h3>
+      <p>
+        Adding the home button to every game makes use of mental model activation. The home button appearing as a house is a metaphor for someone’s home in the real world. Since people’s homes are the main location for all their belongings, the home button taking the user to the location of all the games activates the user’s mental model. The home button also makes use of positive transfer since most apps have a home button to return to the main area of the map.
+      </p>
+    </div>
+
+    <div id="p13">
+      <h3>
+        Formative Evaluation
+      </h3>
+      <p>
+        To complete the redesign using an agile methodology, the team used formative evaluation throughout the project. This evaluation was done by team members (user-centered design) and outside members (participatory design). A summative evaluation was done after the implementation of the project.
+      </p>
+    </div>
+
+    <div id="p14">
+      <h3>
+        Mental Model Activation
+      </h3>
+      <p>
+        Adding the home button to every game makes use of mental model activation. The home button appearing as a house is a metaphor for someone’s home in the real world. Since people’s homes are the main location for all their belongings, the home button taking the user to the location of all the games activates the user’s mental model. The home button also makes use of positive transfer since most apps have a home button to return to the main area of the map.
+      </p>
+    </div>
+
+    <div id="p15">
+      <h3>
+        Responsive Design
+      </h3>
+      <p>
+        Making the site responsive and adjusting the UI for various screen sizes.
+      </p>
+    </div>
+
+    <div id="p16">
+      <h3>
+        Mix Mode Interface
+      </h3>
+      <p>
+        The original site makes use of direct manipulation interfaces in the games because a pointing device is used to manipulate representations directly. In the redesign, the users can also use their keyboard to play sea battles and spades which is indirect interface manipulation. Both these manipulations together make the interface a mixed-mode interface.
+      </p>
+    </div>
+
+    <div id="p17">
+      <h3>
+        Diversity Macro Level Interaction
+      </h3>
+      <p>
+        Part of the goal of the redesign was to make the games more accessible to all users. Adding keyboard support and one-click action allows users who are not able to drag for any reason to still be able to play the game. Having all users be able to play the games is making use of macro-level interaction.
+      </p>
+    </div>
+
+    <div id="p18">
+      <h3>
+        Consistency
+      </h3>
+      <p>
+        Given the redesigns of various pages, the overall design scheme stayed consistent, and key functions, features, and icons are kept consistent throughout the site.
+      </p>
+    </div>
+
+    <div id="p19">
+      <h3>
+        Vertical Prototyping Functionality
+      </h3>
+      <p>
+        While doing the redesign, the team added vertical prototyping functionality to the site. This means adding in-depth functionality for only a few selected features. The redesigned site included many interactive changes to a few games on the site (3) instead of minor changes to every game on the site.
+      </p>
+    </div>
+
+    <div id="p20">
+      <h3>
+        Local Constraint
+      </h3>
+      <p>
+        Added to the redesign was a game filtering system that allows the user to filter games based on difficulty, number of players, and type of game. This makes use of logical constraints because it reduces the number of options that are not relevant to the user. If a user wants to play a card game involving 4 players, they can filter which prevents them from selecting a game with only 2 players.
+      </p>
+    </div>
+
+    <div id="p21">
+      <h3>
+        Visibility
+      </h3>
+      <p>
+        Using keyboard controls in sea battles meant that we needed to let the user know which grid cell the user was currently selecting. We fixed this by adding a reticle that hovers over the grid cell that the user is currently selecting.
+        We need to do the same thing with the game spades to inform the user about the visibility of the system. Now when the user hovers over a card, the card displays a gold border and appears higher than the other cards. Both these changes are crucial to let the user know what is going on in the system.
+      </p>
+    </div>
+
+
+    <h2 id="heuristic">
+      Heuristic
+    </h2>
+    <p>
+      When taking a look at the heuristic evaluation of the redesigned website, the following improvements have been made:
+      <ul>
+        <li>User Control & Freedom</li>
+        <li>Error Prevention</li>
+        <li>Flexibility and Efficiency of Use</li>
+        <li>Aesthetic and Minimalist Design</li>
+        <li>Help & Documentation</li>
+      </ul>
+    </p>
+
+    <h3>
+      User Control & Freedom
+    </h3>
+    <p>
+      Our redesigned site includes a home button that allows the user to return to the main menu where they can select a game of their choosing. In the original version of the site, the user could click the drop-down menu titled “More Games” which displayed a list of all the games on the site but it was difficult to read and very congested. The implementation of the home button gives the user more control over the site.
+      There was also the implementation of a shuffle feature that allows the user to switch to different games by clicking arrows on the right and left sides of the game. This is a metaphor for the shuffle function on a music platform where the user can try different games. This is another feature that gives the user more freedom over the website.
+    </p>
+
+    <h3>
+      Error Prevention
+    </h3>
+    <p>
+      One of the biggest problems with the original site was the information overload on the main screen. Displayed are 42 different game icons with no explanation about any of the games. To improve, we decided to implement a game filtering feature so that the user can filter games based on difficulty, number of players, and type of game. This will prevent the user from making errors by using constraints, for example, if the user wants to play a card game they can easily filter for those games while other games remain hidden. This prevents the user from playing a game that they did not want to originally play.
+    </p>
+
+    <h3>
+      Flexibility and Efficiency of Use
+    </h3>
+    <p>
+      The biggest contribution to our redesign was implementing efficiency and flexibility. As we were avid users of the website, there was a heavy focus on user-centered design and flexibility was a feature that was lacking. In spider solitaire, the only way to move a card was to click and drag which is a difficult way to play for laptop users. The feature that was added was the ability to use one-click action to select a card and then use one-click action to place that card on a selected pile. This gives the user more flexibility because the user can drag and drop but also click on both card piles. This feature is also more efficient for laptop users because clicking is quicker and easier than dragging. The other feature that was added was keyboard support for the game sea battles and Spades. Both these games do not have keyboard support so laptop users must use the trackpad to play the game. The keyboard support allows the user to play both games only using only the keyboard which is quicker, easier, and more comfortable for laptop users. Overall these 3 features make the gameplay much more enjoyable.
+    </p>
+
+    <h3>
+      Aesthetic and Minimalist Design
+    </h3>
+    <p>
+      Another big improvement to the site was a more minimalist and aesthetically pleasing design by using a minimalist and modern design language. This meant using a black-and-white color scheme and using a flat design for the icons. There are also fewer icons on the main menu due to filtering and the icons are bigger and have a more simple design. This makes the overall site look more aesthetically pleasing and puts less memory overload on the user.
+    </p>
+
+    <h3>
+      Help & Documentation
+    </h3>
+    <p>
+      Finally, this site included documentation about each game at the bottom of each game’s page but there is no information about the games on the main menu. That means if the user wanted to know how to play a game they would be required to click and navigate to that game’s page. We added a hover feature where when the user hovers over a game icon, a text box appears giving a short description informing the user of how the game works. This makes use of immediate activation by the text box popping up on hover and keeps information overload down.
+    </p>
+
+
+    <h2 id="recommendations">
+      Recommendations
+    </h2>
+    <p>
+      In light of our final evaluation for the redesign, there are still improvements that can be made to the site. Theses improvements are as follows:
+      <ul>
+        <li>
+          <h3>Implementing features in more games</h3>
+          Currently the cardgames.io site has 42 games which could all use improvements in different ways. Some of these improvements can be keyboard support and one click action which we have previously talked about. This would allow the entire site to function without using a trackpad which would make the site more efficient, flexible and usable for all. There could also be other features implemented to other games as well.
+        </li>
+        <li>
+          <h3>Developing more keyboard support for sea battle</h3>
+          Currently, keyboard support for sea battles allows users to attack ships while just using the keyboard. Placing ships on the other hand can only be done with the mouse. This included rotating ships as well. We would like to add keyboard support for this as well so the entire game can be played with the keyboard adding more flexibility, efficiency to usability for all users.
+        </li>
+        <li>
+          <h3>In-game tutorials</h3>
+          Another feature would be adding in-game tutorials to each game on the site. These tutorials would be on the game page for each game. This would help inform the user and provide a better idea of how to play the game. This is more clear and helpful than providing documentation.
+        </li>
+      </ul>
+    </p>
+
+    <h3>
+      Link to Repo
+    </h3>
+    <a href="https://github.com/uwohci23/group-11">Here</a>
+  </d-article>
+<script type="text/javascript" src="index.bundle.js"></script></body>
+</html>
