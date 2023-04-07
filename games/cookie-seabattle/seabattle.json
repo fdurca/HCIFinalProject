@@ -1,0 +1,20 @@
+{
+    "display": "standalone",
+    "orientation": "portrait",
+    "background_color": "#00a000",
+    "theme_color": "#00a000",
+    "lang": "en-US",
+    "name": "Sea Battle",
+    "short_name": "Sea Battle",
+    "start_url": "./seabattle",
+    "scope": "/",
+    "icons": [{
+        "src": "/seabattle/images/seabattle-touch-icon-192.png",
+        "sizes": "192x192",
+        "type": "image/png"
+    }, {
+        "src": "/shared/images/site-icon-512.png",
+        "sizes": "512x512",
+        "type": "image/png"
+    }]
+}

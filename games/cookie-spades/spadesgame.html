@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang="en" class="spades">
+    <head>
+        <title>Spades | Play it online</title>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+        <meta name="Description" content="Play the classic card game Spades online for free, against the computer or your friends. No download required, just start playing!" />
+        <!-- Removed, don't want the banner showing up where we don't want it <meta name="apple-itunes-app" content="app-id=1496007149" /> -->
+        <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+        <meta name="apple-mobile-web-app-title" content='Spades' />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <link rel="apple-touch-icon" href="/spades/images/spades-touch-icon.png" />
+        <link rel="manifest" href="/spades/3089/spades-manifest.json" />
+        <link rel="preload" href="/shared/images/fonts/Slackey-Regular.woff" as="font" crossorigin="anonymous"/>
+        <link rel="icon" href="/shared/images/favicon32.png" sizes="32x32" />
+        <link rel="icon" href="/spades/images/spades-touch-icon-192.png" sizes="192x192" />
+        <script>
+            var adFreeCode = (document.cookie.match(/adfreecode=(\w+)/)||[])[1];
+            var category = "Spades";
+            var slug = 'spades';
+            var siteVersion = '3089';
+            var showAds = 'adsense';
+            var customChannelId = '4380984990';
+            var players = {"bottom":{"name":"You","face":"face-0.svg","faceSad":"face-0-sad.svg","code":"0","defaultName":"You"},"left":{"name":"Mike","face":"face-mike.svg","faceSad":"face-mike-sad.svg","code":"mlpge","defaultName":"Mike"},"top":{"name":"Bill","face":"face-2.svg","faceSad":"face-2-sad.svg","code":"2","defaultName":"Bill"},"right":{"name":"Lisa","face":"face-3.svg","faceSad":"face-3-sad.svg","code":"3","defaultName":"Lisa"}};
+            var STATIC_ASSET_DOMAIN = 'https://d3hp2os08tb528.cloudfront.net';
+            var APP_MODE = false;
+            
+            if (location.search.match(/appmode/)) {
+                APP_MODE = true;
+                document.documentElement.className += ' appmode';
+            }
+            
+            
+            var defaultSettings = {"speed":{"defaultValue":"normal","allowedValues":["verySlow","slow","normal","fast","veryFast"]}};
+            
+            var defaultSiteSettings = {"players":{},"playerName":"","multiplayerPublicId":"","multiplayerPrivateId":"","multiplayerPhrases":{},"blocked":{},"muted":{},"favorite":{},"alwaysUseInterstitialAds":false,"confetti":true,"gameLinks":"","playerRating":0,"quitCount":0,"connectionBan":0,"rcq":0,"multiplayerGameInProgress":false,"showAdSettingsLink":false,"spreadCards":false,"svgCards":false,"forceDesktopLook":false,"acceptCookiesId":0,"showPersonalizedAds":true,"showDesktopInterstitials":true,"hideAdblockAd":false,"useDarkTheme":false,"holidayThemes":true,"hideMultiplayerButton":false,"mandalorian":0};
+            
+            function getSiteSettingBool(name, defaultVal) {
+                try {
+                    var val = localStorage.getItem('site.' + name);
+                    if (val === null) {
+                        return defaultVal;
+                    }
+            
+                    return val === 'true' ? true : false;
+                } catch(ex) {
+                    return defaultVal;
+                }
+            }
+            
+        </script>
+        <script>
+            if (document.location.search.match(/alerterror/)) {
+                window.onerror = function(msg,src,line,col,error) {
+                    if (error && error.stack) {
+                        alert(error.stack);
+                    } else {
+                        alert(msg);
+                    }
+                };
+            } 
+        </script>
+        <script>     
+            try {
+                //Allow people to force the desktop look.
+                //First check if we're on mobile to decide whether to display the option
+                if (localStorage['site.forceDesktopLook'] == 'true') {
+                    var metas = document.getElementsByTagName('meta');
+                    for (var i=0; i < metas.length; i++) {
+                        var m = metas[i];
+                        if (m.getAttribute('name') === 'viewport') {
+                            m.setAttribute('content', 'width=1050');
+                            break;
+                        }
+                    }
+                }
+            } catch(ex) {
+            
+            }
+        </script>
+        <link rel="stylesheet" href="spades.min.css" />
+        <style id="player-faces-style">
+            .face-bottom-player {
+            background-image:url(face-0.svg);
+            }
+            .face-left-player {
+            background-image:url(face-mike.svg);
+            }
+            .face-top-player {
+            background-image:url(face-2.svg);
+            }
+            .face-right-player {
+            background-image:url(face-3.svg);
+            }
+            .face-bottom-player.sad {
+            background-image:url(face-0-sad.svg);
+            }
+            .face-left-player.sad {
+            background-image:url(face-mike-sad.svg);
+            }
+            .face-top-player.sad {
+            background-image:url(face-2-sad.svg);
+            }
+            .face-right-player.sad {
+            background-image:url(face-3-sad.svg);
+            }
+        </style>
+        <script>
+            function loadPlayerFaces() {
+                var KEY = 'site.players';
+                if (!localStorage[KEY]) {
+                    localStorage[KEY] = JSON.stringify({
+                        bottom : {
+                            face : 'face-0.svg',
+                            faceSad : 'face-0-sad.svg',
+                            name : 'You',
+                            code : '0'
+                        }
+                    });
+                }
+            
+                //2. Get data and add it to css
+                var customPlayers = JSON.parse(localStorage[KEY]);
+            
+                if (customPlayers.bottom.name === 'You' && localStorage['site.playerName']) {
+                    customPlayers.bottom.name = localStorage['site.playerName'];
+                    localStorage[KEY] = JSON.stringify(customPlayers);
+                }
+            
+                if (slug === 'checkers' && document.location.search.match(/tesla/) || navigator.userAgent.match(/Tesla|QtCarBrowser|Model S/)) {
+                    customPlayers.top = {
+                        name : 'Elon',
+                        type : 'custom',
+                        code: "bamoe",
+                        face: "https://cardgames.io/lambda/faces/bamoe",
+                        faceSad: "https://cardgames.io/lambda/faces/bamoe/sad"            
+                    };
+                } 
+                var pdata;
+                var css = '';
+            
+            
+                
+            
+                //Need to do this here to avoid any ugly flickering of faces...
+                if (location.search.match(/\?gid=(.*)/)) {
+                    var gameId = RegExp.$1;
+                    try {
+                        //Don't have access to TempStorage here, need to go directly...
+            
+                        //Keep our own data as it was before, just in case we change to a special face and don't want
+                        //the rematch to revert back to our older face.
+                        var bottom = customPlayers.bottom;
+                        var data = JSON.parse(sessionStorage[slug + '.' + gameId] || sessionStorage[gameId]);
+                        customPlayers = data.facedata;
+                        customPlayers.bottom = bottom;
+                        customPlayers.bottom.name = localStorage['site.playerName'];
+                        document.documentElement.className += ' multiplayergame';
+            
+                        var hideStyle = document.createElement('style');
+                        if (data.players.length === 3) {
+                            hideStyle.innerHTML = '#right-player { display: none !important;}';
+                            document.getElementsByTagName('head')[0].appendChild(hideStyle);
+                        } else if (data.players.length === 2) {
+                            hideStyle.innerHTML = '#right-player, #left-player { display: none !important;}';
+                            document.getElementsByTagName('head')[0].appendChild(hideStyle);
+                        }
+                    } catch(ex) {
+                        //Don't want this here. Just go to a normal game...
+                        //alert('Error starting multiplayer game :(');
+                        location.href = location.pathname;
+                    }
+                }
+                
+            
+            
+                var hideNames = false;
+            
+                for (var id in customPlayers) {
+                    pdata = customPlayers[id];
+                    css += '.face-' + id + '-player { background-image:url(' + pdata.face + '); } \n';
+                    css += '.face-' + id + '-player.sad { background-image:url(' + pdata.faceSad + '); } \n';
+                    //Override names and images...
+                    if (pdata) {
+                        players[id].name = pdata.name;
+                        players[id].face = pdata.face;
+                        players[id].faceSad = pdata.faceSad;
+                        players[id].code = pdata.code;
+                        hideNames = true;
+                    }
+                }
+            
+                var style = document.createElement('style');
+                style.innerHTML = css;
+                style.id = 'player-faces-custom';
+            
+                if (hideNames) {
+                    var tmpStyle = document.createElement('style');
+                    tmpStyle.innerHTML = '.top-player-name, .bottom-player-name, .left-player-name, .right-player-name { color:transparent !important; }';
+                    if (tmpStyle.setAttribute) {
+                        tmpStyle.setAttribute('id', 'temphidenames');
+                    } else {
+                        tmpStyle.id = 'temphidenames';
+                    }
+                }
+            }
+            
+            try {
+                loadPlayerFaces();
+            } catch(ex) { /*Nevermind*/}
+            
+        </script>
+        <script>
+            //Do this before body starts rendering to avoid ugly flicker on mobile when calculating the height
+            (function() {
+            var MOBILE_HEADER_HEIGHT = 47;
+            var MAX_BOARD_HEIGHT = 689;
+            var MIN_BOARD_HEIGHT = 411;
+            var MOBILE_BREAKPOINT = 730;
+            
+            if (APP_MODE) {
+                return; //Can count on calculated things here...
+            }
+            var fillMobileViewPort = true; 
+            if (innerWidth <= fillMobileViewPort) {
+                //Are in the mobile look, might have to force set the height
+                var height = innerHeight - MOBILE_HEADER_HEIGHT;
+                //Bound the height
+                height = Math.min(height, MAX_BOARD_HEIGHT);
+                if (!window.matchMedia('(orientation: landscape)').matches) {
+                    height = Math.max(height, MIN_BOARD_HEIGHT);
+                }
+            
+                //Some hacks here to get the iPhone app height perfect, it's surprisingly fiddly to get it right... 
+                if (APP_MODE && innerHeight <= 667) { 
+                    height -= 5;
+                }
+                
+                var el = document.createElement('style');
+                el.innerHTML = '#play-page { height:' + height + 'px; }';
+                el.id = 'viewport-height';
+                document.getElementsByTagName('head')[0].appendChild(el);
+            }
+            })();
+        </script>
+        <link rel="canonical" href="https://cardgames.io/spades/" />
+        <!--Open Graph Protocol metadata-->
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:site" content="@cardgames_io" />
+        <meta name="twitter:creator" content="@einaregilsson" />
+        <meta property="og:title" content="Spades" />
+        <meta property="og:description" content="Play the classic card game Spades online for free." />
+        <meta property="og:type" content="game" />
+        <meta property="og:url" content="https://cardgames.io/spades/" />
+        <meta property="og:image" content="https://cardgames.io/spades/images/spades-logo.png" />
+        <meta property="fb:app_id" content="1824725124440462" />
+        <meta property="fb:admins" content="808179882" />
+        <script>
+            //Setup basic ad stuff
+            window.adsbygoogle = [];
+            var adBreak = adConfig = function(o) { window.adsbygoogle.push(o); }
+            
+            //Check for custom links
+            
+            try {
+            //Hide them before page loads to avoid flicker
+            var links = localStorage['site.gameLinks'];
+            if (links) {
+                document.documentElement.className += ' use-custom-links';
+            }
+            } catch(ex) {
+            //Don't fuck up the load because of this...
+            }
+            
+            var supportsSvg = true;
+            
+            try {
+            supportsSvg = document.implementation.hasFeature('http://www.w3.org/TR/SVG11/feature#Image', '1.1');
+            } catch(ex) {}
+            
+            var themes = {
+            current : '',
+            names : {halloween:'Halloween', xmas:'Christmas', easter:'Easter', thanksgiving:'Thanksgiving', valentines: 'Valentines day'},
+            init : function() {
+                var date = new Date();
+                var MOBILE_BREAKPOINT = 730;
+            
+                if (this.isEaster(date) && screen.width > MOBILE_BREAKPOINT) { //TODO: Find a better way to handle mobile look
+                    this.current = 'easter';
+                } else if (this.isStarWarsDay(date)) {
+                    this.current = 'starwars';
+                } else if (this.isHalloween(date)) {
+                    this.current = 'halloween';
+                } else if (this.isXmas(date)) {
+                    this.current = 'xmas';
+                } else if (this.isThanksgiving(date)) {
+                    this.current = 'thanksgiving';
+                } else if (this.isValentinesDay(date)) {
+                    this.current = 'valentines';
+                } else if (this.isGoodByeTrump(date)) {
+                    this.current = 'goodbyetrump';
+                }
+            
+                if (document.location.search.match(/\btheme=(\w+)/)) {
+                    this.current = RegExp.$1;
+                }            
+            
+                if (this.current == '' || this.isTurnedOff()) {
+                    return;
+                } 
+              
+                document.write("<link href='/themes/3089/" + this.current + ".min.css' id='theme-css' rel='stylesheet' type='text/css'>");
+                var html = document.getElementsByTagName('html');
+                if (html && html[0]) {
+                    html[0].className += ' ' + this.current;
+                }
+            },
+            
+            isEaster : function(date) {
+                //Easier than trying to calculate this...
+                var easterSundays = [new Date(2020,3,12), new Date(2021,3,4), new Date(2022,3,17)];
+            
+                var timestamp = date.getTime();
+                for (var i=0; i < easterSundays.length; i++) {
+                    var easterSunday = easterSundays[i];
+                    var oneDay = 24 * 60 * 60 * 1000;
+                    var minDay = easterSunday.getTime() - 7*oneDay;
+                    var maxDay = easterSunday.getTime() + oneDay;
+                    if (timestamp >= minDay && timestamp < maxDay) {
+                        return true;
+                    }
+                }
+                return false;
+            },
+            
+            isGoodByeTrump : function(date) {
+                return date.getFullYear() === 2021 && date.getMonth() === 0 && date.getDate() === 20;
+            },
+            
+            isHalloween : function(date) {
+                return date.getDate() >= 28  && date.getDate() <= 31 && date.getMonth() == 9;
+            },
+            isValentinesDay : function(date) {
+                return date.getDate() === 14 && date.getMonth() === 1;
+            },
+            isXmas : function(date) {
+                return date.getMonth() == 11 && date.getDate() >= 6 && date.getDate() <= 26;
+            },
+            isStarWarsDay : function(date) {
+                return date.getMonth() === 4 && date.getDate() === 4 & !APP_MODE;
+            },
+            
+            isThanksgiving : function(date) {
+                var SUNDAY = 0;
+                var THURSDAY = 4;
+                var NOVEMBER = 10; //JavaScript's stupid 0-based month count
+                var ONE_DAY = 24*60*60*1000;
+                var d = date;
+                if (d.getDay() !== SUNDAY && d.getDay() < THURSDAY) {
+                    return false;
+                }
+                for (var i = 0; i < 4; i++) {
+                    if (d.getDay() === THURSDAY) {
+                        break;
+                    } else {
+                        d = new Date(d - ONE_DAY);
+                    }
+                }
+                return d.getDate() >= 22 && d.getDate() <= 28 && d.getMonth() === NOVEMBER; //Fourth Thursday of November
+            },
+            
+            isTurnedOff : function() {
+                try {
+                    return this.current == '' || localStorage['site.holidayThemes'] === 'false' || document.cookie.match(/themeoff/);
+                } catch(ex) {
+                    return true;
+                }
+            },
+            
+            usesDarkTheme : function() {
+                try {
+                    return localStorage['site.useDarkTheme'] === 'true';
+                } catch(ex) {
+                    return false; //IF cookies are disabled, or private mode in Safari, then just accessing localStorage can throw.
+                }
+            },
+            
+            turnOn : function(e) {
+                if (this.current === '') {
+                    return;
+                }
+            
+                $('html').addClass(this.current);
+            
+                $('<link/>').attr({
+                    href : '/themes/3089/' + this.current + '.min.css',
+                    rel : 'stylesheet',
+                    id : 'theme-css'
+                }).appendTo('head');
+            
+                if (this.usesDarkTheme() && this.current !== 'starwars' && this.current !== 'xmas') {
+                    $('html').removeClass('dark-theme');
+                }
+            },
+            turnOff : function(e) {
+                $('html').removeClass(this.current);
+                $('#theme-css').remove();
+                if (this.usesDarkTheme()) {
+                    $('html').addClass('dark-theme');
+                }
+            }
+            };
+            
+            try {
+            themes.init(); 
+            } catch(ex) {}
+            
+            
+            
+            var mainTheme = {
+            init : function(){
+                 var html = document.documentElement;
+                 try {
+                     var siteTheme = localStorage['site.useDarkTheme'] === 'true' ? 'dark-theme' : 'normal';
+                    if(siteTheme && (!themes.current || themes.isTurnedOff() || themes.current === 'starwars' || themes.current === 'goodbyetrump' || themes.current === 'valentines' || themes.current === 'xmas')) {
+                        html.className += ' ' + siteTheme;
+                    }
+                 } catch (ex){
+                 }
+            }
+            };
+            mainTheme.init();
+        </script>
+    </head>
+    <body>
+        <div id="draper-video" class="appmode-remove"></div>
+        <span class="menu-row-1"></span>
+        <span class="menu-row-2"></span>
+        <span class="menu-row-3"></span>
+        </button>
+        <div id="wrapper">
+        <!-- row 1, the promo links/menu -->
+        <a id="play"></a>
+        <!-- end row 1 -->
+        <!-- row 2, with [ad|header-and-board|ad] -->
+        <div id="board-wrapper-and-ads">
+            <div id="board-and-header">
+                
+                <div id="board" class="board spades">
+                    <div id="play-page" class="inner-page">
+                        <div id="left-player" class="avatar">
+                            <div class="face-small face-left-player"></div>
+                            <small class="left-player-name">Mike</small>
+                            <div id="left-player-bubble" class="bubble">
+                                <p><span></span></p>
+                            </div>
+                        </div>
+                        <div id="right-player" class="avatar">
+                            <div class="face-small face-right-player"></div>
+                            <small class="right-player-name">Lisa</small>
+                            <div id="right-player-bubble" class="bubble">
+                                <p><span></span></p>
+                            </div>
+                        </div>
+                        <div id="top-player" class="avatar">
+                            <div class="face-small face-top-player"></div>
+                            <small class="top-player-name">Bill</small>
+                            <div id="top-player-bubble" class="bubble">
+                                <p><span></span></p>
+                            </div>
+                        </div>
+                        <div id="bottom-player" class="avatar">
+                            <div class="face-small face-bottom-player"></div>
+                            <small class="bottom-player-name">You</small>
+                            <div id="bottom-player-bubble" class="bubble">
+                                <p><span></span></p>
+                            </div>
+                        </div>
+                        <div id="messageBox">
+                            <p>Click Deal to start the game.</p>
+                        </div>
+                        <!-- Old browser DIV. Usually hidden. -->
+                        <div id="oldbrowser">
+                            <p>
+                                You are using a very old browser, that is no longer supported by this site. We recommend that you upgrade to one of the following browsers:
+                            </p>
+                            <p>
+                                <a href="https://www.mozilla.org/en-US/firefox/new/" class="lefticon" target="_blank">
+                                <img id="firefox-Logo" border="0" alt="Download Mozilla Firefox" src="" width="100" height="100">
+                                <span class="caption"> Download Mozilla Firefox</span>
+                                </a>
+                                <a href="https://www.google.com/chrome/" class="righticon" target="_blank">
+                                <img id = "Chrome-Logo" border="0" alt="Download Google Chrome" src="" width="100" height="100">
+                                <span class="caption"> Download Google Chrome</span>
+                                </a>       
+                            </p>
+                            <a id="hidebutton" onclick="$('#oldbrowser').hide();">(hide)</a>
+                        </div>
+                        <!-- End Old browser. Usually hidden. -->
+                        <div id="deal" class="multiplayer-hide"><button id="some" class="big">Deal</button></div>
+                        <div id="bid-div">
+                            <div id="bid-div-inner">
+                                <h4>What's your bid?</h4>
+                            </div>
+                        </div>
+                        <div id="bigspade"></div>
+                        <div id="top-player-trick-count" class="trick-count"></div>
+                        <div id="bottom-player-trick-count" class="trick-count"></div>
+                        <div id="left-player-trick-count" class="trick-count"></div>
+                        <div id="right-player-trick-count" class="trick-count"></div>
+                        <div id="inline-score-wrapper">
+                            <div id="inline-score" class="show-after-names">
+                                <table>
+                                    <tr>
+                                        <th>Team</th>
+                                        <th>Score</th>
+                                        <th>Bags</th>
+                                    <tr>
+                                        <td class="score-name">You &amp; <span class="top-player-name">Bill</span></td>
+                                        <td id="human-team-score">0</td>
+                                        <td id="human-team-bags">0</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="score-name"><span class="left-player-name">Mike</span> &amp; <span class="right-player-name">Lisa</span></td>
+                                        <td id="computer-team-score">0</td>
+                                        <td id="computer-team-bags">0</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                        <div id="game-options-page" class="dialog options-page">
+                            <h2>OPTIONS</h2>
+                            <div id="options-version">v0.1 (12345678)</div>
+                            <div id="options-pane-container">
+                                <div id="game-options" class="options-pane">
+                                    <h3>Spades</h3>
+                                    <div class="option-row" id="speed-option-label">
+                                        <label>Game speed</label>
+                                        <label id="speed-value"></label>
+                                    </div>
+                                    <div class="option-row range" id="speed-option">
+                                        <label><input name="speed" type="radio" checked="checked" value="verySlow" /><span>Slow</span></label>
+                                        <label><input name="speed" type="radio" value="slow" /><span>&nbsp;</span></label>
+                                        <label><input name="speed" type="radio" value="normal" /><span>&nbsp;</span></label>
+                                        <label><input name="speed" type="radio" value="fast" /><span>&nbsp;</span></label>
+                                        <label><input name="speed" type="radio" value="veryFast" /><span>Fast</span></label>
+                                        <div style="clear:both;"></div>
+                                    </div>
+                                </div>
+                                <div id="site-options" class="options-pane">
+                                    <h3>All games</h3>
+                                    <div class="option-row option-desktop checkbox">
+                                        <label title="Spread the cards in your hand wider, making it easier to hit the right card.">Spread cards<input type="checkbox" name="spreadCards"/><span></span></label>
+                                    </div>
+                                    <div class="option-row option-desktop checkbox appmode-remove">
+                                        <label title="Only show ads inbetween rounds in the games, never show ad banners on the sides.">Interstitial ads<input type="checkbox" name="alwaysUseInterstitialAds" /><span></span></label>
+                                    </div>
+                                    <div class="option-row checkbox">
+                                        <label title="Use a darker theme for the site, which can be easier on the eyes.">Use dark theme<input type="checkbox" name="useDarkTheme" /><span></span></label>
+                                    </div>
+                                    <div class="option-row checkbox">
+                                        <label title="Special holiday themes are active around holidays, like Christmas, Halloween and Easter.">Holiday themes<input type="checkbox" name="holidayThemes"/><span></span></label>
+                                    </div>
+                                    <div class="option-row checkbox">
+                                        <label title="Show confetti for special celebrations, like getting a perfect game in Hearts.">Confetti<input type="checkbox" name="confetti" /><span></span></label>
+                                    </div>
+                                    <div class="option-row checkbox">
+                                        <label title="Hide Multiplayer button when game is active.">Hide Multiplayer button<input type="checkbox" name="hideMultiplayerButton" /><span></span></label>
+                                    </div>
+                                    <div class="option-row">
+                                        <label title="Customize faces and names of opponents"><a href="/opponents/">Customize opponents...</a></label>
+                                    </div>
+                                    <div class="option-row hide-mobile">
+                                        <label title="Block or unblock players from Multiplayer mode"><a href="/blocklist/">Blocked users...</a></label>
+                                    </div>
+                                    <div class="option-row hide-mobile">
+                                        <label title="Manage your favorite players from Multiplayer mode"><a href="/favoritelist/">Favorite users...</a></label>
+                                    </div>
+                                </div>
+                                <div style="clear:both;"></div>
+                            </div>
+                            <small class="appmode-hide">Certain changes only take effect after refreshing the page.</small>
+                            <button id="close-options">Close</button>
+                        </div>
+                        <div id="multiplayer-lobby">
+                            <h3><span>Spades Multiplayer Lobby</span></h3>
+                            <p id="lobby-message"><span>Click a table to join a multiplayer game.</span><button id="leave-table">Leave table</button></p>
+                            <div id="private-table-created" class="lobby-dialog">
+                                <h3>Private table created</h3>
+                                <p>The code for the table is:</p>
+                                <input type="text" id="table-code" readonly/>
+                                <p>Give that code to whoever you want to play with, they can use it to join.<span class="appmode-remove"> Or send the link below to them, if they click it they'll join
+                                    automatically:</span>
+                                </p>
+                                <input type="text" id="table-code-link" readonly class="appmode-remove" />
+                                <div class="lobby-dialog-buttons">
+                                    <button>OK</button>
+                                </div>
+                            </div>
+                            <div id="error-message-box" class="lobby-dialog">
+                                <h3></h3>
+                                <p></p>
+                                <div class="lobby-dialog-buttons">
+                                    <button>OK</button>
+                                </div>
+                            </div>
+                            <div id="join-private-table-dialog" class="lobby-dialog">
+                                <h3>Join private table</h3>
+                                <p id="join-text">Please enter the code for the table:</p>
+                                <input type="text" id="join-table-code" maxlength="6" inputmode="numeric" pattern="\d*"/>
+                                <div class="lobby-dialog-buttons">
+                                    <button id="join-table-ok" disabled="disabled">OK</button>
+                                    <button id="join-table-cancel">Cancel</button>
+                                </div>
+                            </div>
+                            <div id="multiplayer-lobby-tables">
+                            </div>
+                            <div id="private">
+                                Want to create a table for just you and your friends? You can 
+                                <a href="#" id="create-private-table">Create a private table</a> or if someone has sent you a code you can <a href="#" id="join-private-table">join a private table</a>.
+                            </div>
+                            <div class="multiplayer-close-container">
+                                <button id="multiplayer-lobby-close" class="big">Close</button>
+                            </div>
+                        </div>
+                        <div id="phrases" class="dialog">
+                            <p id="phrase-title">What do you want to say to your opponent?</p>
+                            <div id="phrases-list">
+                                <div class="speak-bubble" id="well-played">Well played!</div>
+                                <div class="speak-bubble" id="oh-no">Oh no :(</div>
+                                <div class="speak-bubble" id="good-game">Good game!</div>
+                                <div class="speak-bubble" id="i-was-lucky">🍀 I was lucky!</div>
+                                <div class="speak-bubble" id="hi">Hi</div>
+                                <div class="speak-bubble" id="ouch">Ouch!</div>
+                                <div class="speak-bubble" id="wow">Wow!</div>
+                                <div class="speak-bubble" id="stay-safe">Stay safe!</div>
+                                <div class="speak-bubble" id="no-table-talk">No table talk!</div>
+                                <div class="speak-bubble" id="oops">Oops!</div>
+                                <div class="speak-bubble" id="the-force">May the force be with you!</div>
+                                <div class="speak-bubble" id="mentor-bill">Bill taught you well!</div>
+                                <div class="speak-bubble" id="prepare-to-lose">Prepare to lose!</div>
+                                <div class="speak-bubble" id="thanks">Thanks!</div>
+                                <div class="speak-bubble" id="sorry">Sorry</div>
+                                <div class="speak-bubble" id="huge-mistake">I've made a huge mistake! :(</div>
+                                <div class="speak-bubble" id="my-mistake">My mistake!</div>
+                                <div class="speak-bubble" id="your-turn">Your turn!</div>
+                                <div class="speak-bubble" id="have-to-go">I have to go.</div>
+                                <div class="speak-bubble" id="boom">BOOM!</div>
+                                <div class="speak-bubble" id="technical-difficulties">Technical difficulties</div>
+                            </div>
+                            <div id="multiplayer-actions">
+                                <button id="ask-to-turn-off-timer">Ask players to turn off timer?</button>
+                            </div>
+                            <div id="emoji-list" style="font-family: 'Segoe UI Emoji'">
+                                <div class="emoji-speak" id="emoji-big-smile">😀</div>
+                                <div class="emoji-speak" id="emoji-cry-laugh">😂</div>
+                                <div class="emoji-speak" id="emoji-sad">🙁</div>
+                                <div class="emoji-speak" id="emoji-crying">😭</div>
+                                <div class="emoji-speak" id="emoji-hmm">🤔</div>
+                                <div class="emoji-speak" id="emoji-angry">😠</div>
+                                <div class="emoji-speak" id="emoji-shocked">😮</div>
+                                <div class="emoji-speak" id="emoji-wink-tongue">😜</div>
+                                <div class="emoji-speak" id="emoji-cool">😎</div>
+                                <div class="emoji-speak" id="emoji-confused">😵</div>
+                                <div class="emoji-speak" id="emoji-star-eyes">🤩</div>
+                                <div class="emoji-speak" id="emoji-heart-eyes">😍</div>
+                                <div class="emoji-speak" id="emoji-mindblown">🤯</div>
+                                <div class="emoji-speak" id="emoji-crown">👑</div>
+                                <div class="emoji-speak" id="emoji-luck">🍀</div>
+                                <div class="emoji-speak" id="emoji-wave">👋</div>
+                                <div class="emoji-speak" id="emoji-clap">👏</div>
+                                <div class="emoji-speak" id="emoji-thumbs-up">👍</div>
+                                <div class="emoji-speak" id="emoji-thumbs-down">👎</div>
+                                <div class="emoji-speak" id="emoji-rock">🤘</div>
+                                <div class="emoji-speak" id="emoji-nice">👌</div>
+                                <div class="emoji-speak" id="emoji-live-long-prosper">🖖 </div>
+                            </div>
+                            <br />
+                            <button id="cancel-speak">Cancel</button>
+                        </div>
+                        <div class="multiplayer-dialog" id="no-cookies">
+                            <h2>Can't use multiplayer</h2>
+                            <p>
+                                Sorry, it looks like you have cookies disabled for our site. The Multiplayer mode doesn't work
+                                without cookies enabled 🙁.
+                            </p>
+                            <div class="button-container">
+                                <button>OK</button>
+                            </div>
+                        </div>
+                        <div class="multiplayer-dialog" id="reconnecting">
+                            <h2>Connection problem</h2>
+                            <p>
+                                Your connection to the game server is having some problem, but we are trying
+                                to reconnect you to the game. 🤓 Giving up in <span></span>.
+                            </p>
+                        </div>
+                        <div class="multiplayer-dialog" id="reconnecting-failed">
+                            <h2>Game disconnected</h2>
+                            <p>
+                                Sorry, we couldn't connect you back to your game. 🙁
+                            </p>
+                            <div class="button-container">
+                                <button class="exit-multiplayer-game">Well that sucks</button>
+                            </div>
+                        </div>
+                        <div class="multiplayer-dialog" id="get-out">
+                            <h2>Disconnected</h2>
+                            <p>
+                                Sorry, you were disconnected from the game for too long, we had
+                                to remove you from the game so the others could keep playing. 🙁
+                            </p>
+                            <div class="button-container">
+                                <button class="exit-multiplayer-game">Well that sucks</button>
+                            </div>
+                        </div>
+                        <div class="dialog" id="mandalorian">
+                            <div class="achievement-heading">
+                                <div class="stars"></div>
+                                <h2>ACHIEVEMENT UNLOCKED</h2>
+                                <div class="stars"></div>
+                            </div>
+                            <p>
+                                It looks like you might be a <span class="m-name"></span>. You can now wear a Beskar armor while playing.
+                            </p>
+                            <div id="mandalorian-face">
+                            </div>
+                            <p>
+                                Do you want to put on the <span class="m-name"></span> helmet?
+                            </p>
+                            <div class="button-panel">
+                                <button id="mandalorian-yes">Yes please</button>
+                                <button id="mandalorian-no">Uhh, no thanks</button>
+                            </div>
+                        </div>
+                        <div class="multiplayer-dialog" id="table-not-found">
+                            <h2>Game table not found</h2>
+                            <p>
+                                Sorry, we couldn't find your game table on our servers! 🙁
+                            </p>
+                            <div class="button-container">
+                                <button class="exit-multiplayer-game">OK</button>
+                            </div>
+                        </div>
+                        <div class="multiplayer-dialog" id="block-mute">
+                            <h2>Block, mute, favorite</h2>
+                            <div class="player-image"></div>
+                            <p>
+                                If you mute a player you won't see any messages they send during a game.
+                                If you block a player they can no longer challenge you to a game or join a table you are at.
+                                IF you favorite a player, they'll have a little heart to remind you how awesome they are!
+                            </p>
+                            <div class="button-container">
+                                <button id="mute-player">Mute</button>
+                                <button id="block-player">Block</button>
+                                <button id="favorite-player">Favorite</button>
+                                <button id="cancel-block-mute">Close</button>
+                            </div>
+                        </div>
+                        <div class="multiplayer-dialog" id="confirm-join-blocked-player">
+                            <h2>Join table with blocked user?</h2>
+                            <p>This table has a player (<span></span>) that you have blocked previously (perhaps under another name).
+                                Are you sure you want to join it?
+                            </p>
+                            <div class="button-container">
+                                <button id="join-blocked-yes">Yes</button>
+                                <button id="join-blocked-no">No</button>
+                            </div>
+                        </div>
+                        <div id="cover">
+                        </div>
+                        <div id="enter-name" class="multiplayer-dialog">
+                            <h2>Enter your name</h2>
+                            <p>Please enter a name to display to other players</p>
+                            <input id="name-new" type="text" maxlength="10" autocomplete="off" />
+                            <div class="button-container">
+                                <button id="cancel-name-new">Cancel</button>
+                                <button id='confirm-name-new' disabled="disabled">OK</button>
+                            </div>
+                        </div>
+                        <div id="concede-dialog" class="multiplayer-dialog">
+                            <h2>Are you sure you want to concede the game?</h2>
+                            <p></p>
+                            <div class="button-container">
+                                <button id="concede-confirm">Yes</button>
+                                <button id="concede-cancel">No</button>
+                            </div>
+                        </div>
+                        <div class="multiplayer-dialog" id="idle-disconnect">
+                            <h2>Disconnected</h2>
+                            <p>You've been disconnected due to inactivity. You can always reconnect by pressing the "Multiplayer" button</p>
+                            <div class="button-container">
+                                <button class="close-dialog">Close</button>
+                            </div>
+                        </div>
+                        <div class="multiplayer-dialog" id="rematch">
+                            <h2>Rematch?</h2>
+                            <p id="rematch-text">Would you like to play another game with the same players?</p>
+                            <div id="rematch-faces">
+                            </div>
+                            <div class="button-container">
+                                <button id="rematch-yes">Yes</button>
+                                <button id="rematch-no">No</button>
+                                <button class="close-dialog" id="rematch-fail">OK</button>
+                                <button id="rematch-cancel">Cancel</button>
+                            </div>
+                        </div>
+                        <div class="multiplayer-dialog" id="turn-off-timer">
+                            <h2>Turn off the timer?</h2>
+                            <p id="turn-off-timer-text"> has suggested that you turn off the timer for the game.</p>
+                            <div id="turn-off-timer-faces">
+                            </div>
+                            <div class="button-container">
+                                <button id="turn-off-timer-yes">Yes</button>
+                                <button id="turn-off-timer-no">No</button>
+                                <button class="close-dialog" id="turn-off-timer-ok">OK</button>
+                            </div>
+                        </div>
+                        <!-- Win and lose screens -->
+                        <div class="dialog results" id="result-box">
+                            <h3 id="result-header">Congratulations, you won this hand!</h3>
+                            <div id="winner-pics" class="hide-restart">
+                                <div class="trophy"></div>
+                                <span id="winner1"></span>
+                                <span id="winner2"></span>
+                                <div class="trophy"></div>
+                            </div>
+                            <h5>Round X</h5>
+                            <div class="result-table">
+                                <table>
+                                    <tr id="names-row">
+                                        <th></th>
+                                        <th class="scorecard-names">You &amp; <span class="top-player-name">Bill</span></th>
+                                        <th class="scorecard-names"><span class="left-player-name">Mike</span> &amp; <span class="right-player-name">Lisa</span></th>
+                                    </tr>
+                                    <tr id="combined-bid">
+                                        <td>Combined bid</td>
+                                        <td class="t1"></td>
+                                        <td class="t2"></td>
+                                    </tr>
+                                    <tr id="tricks-taken">
+                                        <td>Tricks taken</td>
+                                        <td class="t1"></td>
+                                        <td class="t2"></td>
+                                    </tr>
+                                    <tr id="bags">
+                                        <td>Bags</td>
+                                        <td class="t1"></td>
+                                        <td class="t2"></td>
+                                    </tr>
+                                    <tr id="bags-last-round">
+                                        <td>Bags from last round</td>
+                                        <td class="t1"></td>
+                                        <td class="t2"></td>
+                                    </tr>
+                                    <tr id="bags-total">
+                                        <td>Total bags</td>
+                                        <td class="t1"></td>
+                                        <td class="t2"></td>
+                                    </tr>
+                                    <!--
+                                        <tr id="bags-next-round">
+                                        	<th>Bags carried to next round</th>
+                                        	<td></td>
+                                        	<td></td>
+                                        </tr>
+                                        -->
+                                    <tr id="scoring-header">
+                                        <th colspan="3">Scoring</th>
+                                    </tr>
+                                    <tr id="successful-bid" class="show-restart">
+                                        <td>Successful bid</td>
+                                        <td class="t1"></td>
+                                        <td class="t2"></td>
+                                    </tr>
+                                    <tr id="failed-bid" class="show-restart">
+                                        <td>Failed bid</td>
+                                        <td class="t1"></td>
+                                        <td class="t2"></td>
+                                    </tr>
+                                    <tr id="bag-score" class="show-restart">
+                                        <td>Bag score</td>
+                                        <td class="t1"></td>
+                                        <td class="t2"></td>
+                                    </tr>
+                                    <tr id="bag-penalty" class="show-restart">
+                                        <td>Bag penalty</td>
+                                        <td class="t1"></td>
+                                        <td class="t2"></td>
+                                    </tr>
+                                    <tr id="successful-nil-bid" class="show-restart">
+                                        <td>Successful nil bid</td>
+                                        <td class="t1"></td>
+                                        <td class="t2"></td>
+                                    </tr>
+                                    <tr id="failed-nil-bid" class="show-restart">
+                                        <td>Failed nil bid</td>
+                                        <td class="t1"></td>
+                                        <td class="t2"></td>
+                                    </tr>
+                                    <tr id="points-this-round" class="totals">
+                                        <td>Points this round</td>
+                                        <td class="t1"></td>
+                                        <td class="t2"></td>
+                                    </tr>
+                                    <tr id="points-last-round">
+                                        <td>Previous points</td>
+                                        <td class="t1"></td>
+                                        <td class="t2"></td>
+                                    </tr>
+                                    <tr id="points-total" class="thick-top">
+                                        <th>Total points</th>
+                                        <td class="t1"></td>
+                                        <td class="t2"></td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div id="multiplayer-refresh-countdown">Starting next round in <span>X</span> seconds...</div>
+                            <div class="button-panel">
+                                <button id="suggest-rematch">Suggest rematch</button>
+                                <button class="button show-restart multiplayer-start-next-round" id="start-new-game">Play another hand</button>
+                                <button class="button hide-restart" id="start-new-tournament">Start a new game</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="beta-screen">
+                        <!-- Hi there. Are you looking for a way to bypass the beta? Congratulations, you're such a hacker! -->
+                        <p>Hi. This game is currently not ready for playing, it's in beta testing right now, we'll announce when it's ready.</p>
+                        <p>If you've been given a beta-testing code by CardGames.io please enter it below and click the Enter button.</p>
+                        <input type="text" id="beta-code"/>
+                        <button>Enter</button>
+                    </div>
+                    <div id="star-wars-day" class="underboard-message theme-hidden starwars appmode-remove">
+                        <p>Happy Star Wars Day! May the 4th be with you!</p>
+                        <p id="starwars-off">Don't like Star Wars? <a class="theme-off" href="#">Click here to turn the theme off</a>. Or come on over to our <a target="_blank" href="https://www.facebook.com/groups/cardgames.io.community">Facebook community group</a>
+                            and tell us all about it.
+                    </div>
+                    <div id="halloween-underboard" class="underboard-message theme-hidden halloween appmode-remove">
+                        Happy Halloween! Don't like the Halloween theme? <a class="theme-off" href="#">Click here to turn the theme off</a>. Or come on over to our <a target="_blank" href="https://www.facebook.com/groups/cardgames.io.community">Facebook community group</a>
+                        and tell us all about it.
+                    </div>
+                    <div id="easter-underboard" class="underboard-message theme-hidden easter appmode-remove">
+                        Happy Easter! Don't like the Easter theme? <a class="theme-off" href="#">Click here to turn the theme off</a>. Or come on over to our <a target="_blank" href="https://www.facebook.com/groups/cardgames.io.community">Facebook community group</a>
+                        and tell us all about it.
+                    </div>
+                    <div id="thanksgiving-underboard" class="underboard-message theme-hidden thanksgiving appmode-remove">
+                        Happy Thanksgiving! Don't like the Thanksgiving theme? <a class="theme-off" href="#">Click here to turn the theme off</a>. Or come on over to our <a target="_blank" href="https://www.facebook.com/groups/cardgames.io.community">Facebook community group</a>
+                        and tell us all about it.
+                    </div>
+                    <div id="xmas-underboard" class="underboard-message theme-hidden xmas appmode-remove">
+                        Don't like the Christmas theme? <a class="theme-off" href="#">Click here to turn the theme off</a>. Or come on over to our <a target="_blank" href="https://www.facebook.com/groups/cardgames.io.community">Facebook community group</a>
+                        and tell us all about it.
+                    </div>
+                </div>
+                <div style="clear:both" class="appmode-remove"></div>
+            </div>
+            <!--end row 2 -->
+            <script type="text/javascript" src="jquery.js"></script>
+            <script type="text/javascript" src="socket.js"></script>
+            <script src="spades.min.js"></script>
+        </div>
+    </body>
+</html>

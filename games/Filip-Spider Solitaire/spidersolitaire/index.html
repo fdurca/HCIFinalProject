@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en" class="spidersolitaire">
+    <head>
+        <title>Spider Solitaire | Play it online</title>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+        <meta name="Description" content="Play Spider Solitaire online. Simple gameplay, excellent graphics and unlimited undos!" />
+        <!-- Removed, don't want the banner showing up where we don't want it <meta name="apple-itunes-app" content="app-id=1496007149" /> -->
+        <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+        <meta name="apple-mobile-web-app-title" content='Spider Solitaire' />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <link rel="apple-touch-icon" href="../spidersolitaire/images/spidersolitaire-touch-icon.png" />
+        <link rel="manifest" href="https://cardgames.io/spidersolitaire/3089/spidersolitaire-manifest.json" />
+        <!-- Bootstrap CSS library -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+            <!--GOOGLE FONT-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rowdies&display=swap" rel="stylesheet">
+        <script>
+            var adFreeCode = (document.cookie.match(/adfreecode=(\w+)/)||[])[1];
+            var category = "Spider Solitaire";
+            var slug = 'spidersolitaire';
+            var siteVersion = '3089';
+            var showAds = 'adsense';
+            var customChannelId = '5857718190';
+            var players = {"bottom":{"name":"You","face":"../shared/images/svg/face-0.svg","faceSad":"../shared/images/svg/face-0-sad.svg","code":"0","defaultName":"You"},"left":{"name":"Mike","face":"../shared/images/svg/face-mike.svg","faceSad":"../shared/images/svg/face-mike-sad.svg","code":"mlpge","defaultName":"Mike"},"top":{"name":"Bill","face":"../shared/images/svg/face-2.svg","faceSad":"../shared/images/svg/face-2-sad.svg","code":"2","defaultName":"Bill"},"right":{"name":"Lisa","face":"../shared/images/svg/face-3.svg","faceSad":"../shared/images/svg/face-3-sad.svg","code":"3","defaultName":"Lisa"}};
+            var STATIC_ASSET_DOMAIN = 'https://d3hp2os08tb528.cloudfront.net';
+            var APP_MODE = false;
+            
+            if (location.search.match(/appmode/)) {
+                APP_MODE = true;
+                document.documentElement.className += ' appmode';
+            }
+            
+            
+            var defaultSettings = {"suits":{"defaultValue":2,"allowedValues":[1,2,4]},"showSpiders":true,"simpleDeck":false,"speed":{"defaultValue":"normal","allowedValues":["verySlow","slow","normal","fast","veryFast"]}};
+            
+            var defaultSiteSettings = {"players":{},"playerName":"","multiplayerPublicId":"","multiplayerPrivateId":"","multiplayerPhrases":{},"blocked":{},"muted":{},"favorite":{},"alwaysUseInterstitialAds":false,"confetti":true,"gameLinks":"","playerRating":0,"quitCount":0,"connectionBan":0,"rcq":0,"multiplayerGameInProgress":false,"showAdSettingsLink":false,"spreadCards":false,"svgCards":false,"forceDesktopLook":false,"acceptCookiesId":0,"showPersonalizedAds":true,"showDesktopInterstitials":true,"hideAdblockAd":false,"useDarkTheme":false,"holidayThemes":true,"hideMultiplayerButton":false,"mandalorian":0};
+            
+            function getSiteSettingBool(name, defaultVal) {
+                try {
+                    var val = localStorage.getItem('site.' + name);
+                    if (val === null) {
+                        return defaultVal;
+                    }
+            
+                    return val === 'true' ? true : false;
+                } catch(ex) {
+                    return defaultVal;
+                }
+            }
+            
+        </script>
+        <script>
+            if (document.location.search.match(/alerterror/)) {
+                window.onerror = function(msg,src,line,col,error) {
+                    if (error && error.stack) {
+                        alert(error.stack);
+                    } else {
+                        alert(msg);
+                    }
+                };
+            } 
+        </script>
+        <script>     
+            try {
+                //Allow people to force the desktop look.
+                //First check if we're on mobile to decide whether to display the option
+                if (localStorage['site.forceDesktopLook'] == 'true') {
+                    var metas = document.getElementsByTagName('meta');
+                    for (var i=0; i < metas.length; i++) {
+                        var m = metas[i];
+                        if (m.getAttribute('name') === 'viewport') {
+                            m.setAttribute('content', 'width=1050');
+                            break;
+                        }
+                    }
+                }
+            } catch(ex) {
+            
+            }
+        </script>
+        <link rel="stylesheet" href="../spidersolitaire/3089/spidersolitaire.css" />
+        <script>
+            function loadPlayerFaces() {
+                var KEY = 'site.players';
+                if (!localStorage[KEY]) {
+                    localStorage[KEY] = JSON.stringify({
+                        bottom : {
+                            face : '/shared/images/svg/face-0.svg',
+                            faceSad : '../shared/images/svg/face-0-sad.svg',
+                            name : 'You',
+                            code : '0'
+                        }
+                    });
+                }
+            
+                //2. Get data and add it to css
+                var customPlayers = JSON.parse(localStorage[KEY]);
+            
+                if (customPlayers.bottom.name === 'You' && localStorage['site.playerName']) {
+                    customPlayers.bottom.name = localStorage['site.playerName'];
+                    localStorage[KEY] = JSON.stringify(customPlayers);
+                }
+            
+                if (slug === 'checkers' && document.location.search.match(/tesla/) || navigator.userAgent.match(/Tesla|QtCarBrowser|Model S/)) {
+                    customPlayers.top = {
+                        name : 'Elon',
+                        type : 'custom',
+                        code: "bamoe",
+                        face: "https://cardgames.io/lambda/faces/bamoe",
+                        faceSad: "https://cardgames.io/lambda/faces/bamoe/sad"            
+                    };
+                } 
+                var pdata;
+                var css = '';
+            
+            
+                
+            
+            
+                var hideNames = false;
+            
+                for (var id in customPlayers) {
+                    pdata = customPlayers[id];
+                    css += '.face-' + id + '-player { background-image:url(' + pdata.face + '); } \n';
+                    css += '.face-' + id + '-player.sad { background-image:url(' + pdata.faceSad + '); } \n';
+                    //Override names and images...
+                    if (pdata) {
+                        players[id].name = pdata.name;
+                        players[id].face = pdata.face;
+                        players[id].faceSad = pdata.faceSad;
+                        players[id].code = pdata.code;
+                        hideNames = true;
+                    }
+                }
+            
+                var style = document.createElement('style');
+                style.innerHTML = css;
+                style.id = 'player-faces-custom';
+                document.getElementsByTagName('head')[0].appendChild(style);
+            
+                if (hideNames) {
+                    var tmpStyle = document.createElement('style');
+                    tmpStyle.innerHTML = '.top-player-name, .bottom-player-name, .left-player-name, .right-player-name { color:transparent !important; }';
+                    if (tmpStyle.setAttribute) {
+                        tmpStyle.setAttribute('id', 'temphidenames');
+                    } else {
+                        tmpStyle.id = 'temphidenames';
+                    }
+                    document.getElementsByTagName('head')[0].appendChild(tmpStyle);
+                }
+            }
+            
+            try {
+                loadPlayerFaces();
+            } catch(ex) { /*Nevermind*/}
+            
+        </script>
+        <script>
+            //Do this before body starts rendering to avoid ugly flicker on mobile when calculating the height
+            (function() {
+            var MOBILE_HEADER_HEIGHT = 47;
+            var MAX_BOARD_HEIGHT = 689;
+            var MIN_BOARD_HEIGHT = 411;
+            var MOBILE_BREAKPOINT = 730;
+            
+            if (APP_MODE) {
+                return; //Can count on calculated things here...
+            }
+            var fillMobileViewPort = true; 
+            if (innerWidth <= fillMobileViewPort) {
+                //Are in the mobile look, might have to force set the height
+                var height = innerHeight - MOBILE_HEADER_HEIGHT;
+                //Bound the height
+                height = Math.min(height, MAX_BOARD_HEIGHT);
+                if (!window.matchMedia('(orientation: landscape)').matches) {
+                    height = Math.max(height, MIN_BOARD_HEIGHT);
+                }
+            
+                //Some hacks here to get the iPhone app height perfect, it's surprisingly fiddly to get it right... 
+                if (APP_MODE && innerHeight <= 667) { 
+                    height -= 5;
+                }
+                
+                var el = document.createElement('style');
+                el.innerHTML = '#play-page { height:' + height + 'px; }';
+                el.id = 'viewport-height';
+                document.getElementsByTagName('head')[0].appendChild(el);
+            }
+            })();
+        </script>
+        <link rel="canonical" href="https://cardgames.io/spidersolitaire/" />
+        <!--Open Graph Protocol metadata-->
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:site" content="@cardgames_io" />
+        <meta name="twitter:creator" content="@einaregilsson" />
+        <meta property="og:title" content="Spider Solitaire" />
+        <meta property="og:description" content="Play Spider Solitaire online. Simple gameplay, excellent graphics and unlimited undos!" />
+        <meta property="og:type" content="game" />
+        <meta property="og:url" content="https://cardgames.io/spidersolitaire/" />
+        <meta property="og:image" content="https://cardgames.io/spidersolitaire/images/spidersolitaire-logo.png" />
+        <meta property="fb:app_id" content="1824725124440462" />
+        <meta property="fb:admins" content="808179882" />
+        <script>
+            var css = '#large-spider, .spider { display:none !important; }';
+            var style = document.createElement('style');
+            style.innerText = css;
+            try {
+                if (location.search.match(/hidespider/) || localStorage['spidersolitaire.hidespider']) {
+                    document.getElementsByTagName('head')[0].appendChild(style);
+                    localStorage['spidersolitaire.hidespider'] = 'true';
+                }
+            } catch(ex) {}
+            
+        </script>
+    </head>
+    <main>
+<!--HEADER AND PAGE TITLE-->
+
+  
+    
+        <!-- row 2, with [ad|header-and-board|ad] -->
+
+           
+               
+                    <div id="play-page" class="inner-page">
+                        <div id="messageBox">
+                            <p></p>
+                        </div>
+                        <!-- Old browser DIV. Usually hidden. -->
+                        <div id="oldbrowser">
+                            <p>
+                                You are using a very old browser, that is no longer supported by this site. We recommend that you upgrade to one of the following browsers:
+                            </p>
+                            <p>
+                                <a href="https://www.mozilla.org/en-US/firefox/new/" class="lefticon" target="_blank">
+                                <img id="firefox-Logo" border="0" alt="Download Mozilla Firefox" src="" width="100" height="100">
+                                <span class="caption"> Download Mozilla Firefox</span>
+                                </a>
+                                <a href="https://www.google.com/chrome/" class="righticon" target="_blank">
+                                <img id = "Chrome-Logo" border="0" alt="Download Google Chrome" src="" width="100" height="100">
+                                <span class="caption"> Download Google Chrome</span>
+                                </a>       
+                            </p>
+                            <a id="hidebutton" onclick="$('#oldbrowser').hide();">(hide)</a>
+                        </div>
+                        <!-- End Old browser. Usually hidden. -->
+                        <div id="info-bar">
+                            <span id="time">00:00</span> | <span id="score">Score: 500</span>
+                        </div>
+                        <div id="undo" class="hide-win"><button>Undo</button></div>
+                        <div id="game-nr">Game: <a href="#game-nr" class="game-nr above-confetti" title="Click here to start a specific game, or see the record for the current game">#234235</a></div>
+                        <div id="loser-screen" class="dialog">
+                            <h3>GAME FINISHED</h3>
+                            <p id="solitaire-lose-text">There are no more possible moves left.</p>
+                            <p id="record"></p>
+                            <div class="button-container">
+                                <button id="start-game-after-losing">Start new game</button>
+                                <button id="let-me-keep-playing">Keep playing anyway</button>
+                            </div>
+                        </div>
+                        <div id="game-nr-options" class="dialog">
+                            <h3>Game <span class="game-nr"></span></h3>
+                            <p>
+                                You are currently playing game <span class="game-nr"></span>. <span class="current-record"></span>
+                            </p>
+                            <p>
+                                If you want to play a specific game, enter the number below (1-50000) and press the "Start numbered game" button.
+                            </p>
+                            <div class="game-nr-input">
+                                Game #<input type="text" id="start-game-nr" inputmode="numeric" maxlength="5" pattern="\d*" />
+                            </div>
+                            <div class="button-container">
+                                <button id="start-numbered-game">Start numbered game</button>
+                                <button id="cancel-new-numbered-game">Cancel</button>
+                            </div>
+                        </div>
+                        <div id="large-spider" class="show-mobile"></div>
+                        <div id="game-options-page" class="dialog options-page">
+                            <h2>OPTIONS</h2>
+                            <div id="options-version">v0.1 (12345678)</div>
+                            <div id="options-pane-container">
+                                <div id="game-options" class="options-pane">
+                                    <h3>Spider Solitaire</h3>
+                                    <div class="option-row radiobuttons">
+                                        <label><input name="suits" type="radio" checked="checked" value="1" /><span>Beginner: 1 suit</span></label>
+                                        <label><input name="suits" type="radio" value="2" /><span>Intermediate: 2 suits</span></label>
+                                        <label><input name="suits" type="radio" value="4" /><span>Advanced: 4 suits</span></label>
+                                    </div>
+                                    <div class="option-row checkbox">
+                                        <label title="Use a simple deck of cards with larger symbols.">Use simple deck<input type="checkbox" name="simpleDeck"/><span></span></label>
+                                    </div>
+                                    <div class="option-row" id="speed-option-label">
+                                        <label>Game speed</label>
+                                        <label id="speed-value"></label>
+                                    </div>
+                                    <div class="option-row range" id="speed-option">
+                                        <label><input name="speed" type="radio" checked="checked" value="verySlow" /><span>Slow</span></label>
+                                        <label><input name="speed" type="radio" value="slow" /><span>&nbsp;</span></label>
+                                        <label><input name="speed" type="radio" value="normal" /><span>&nbsp;</span></label>
+                                        <label><input name="speed" type="radio" value="fast" /><span>&nbsp;</span></label>
+                                        <label><input name="speed" type="radio" value="veryFast" /><span>Fast</span></label>
+                                        <div style="clear:both;"></div>
+                                    </div>
+                                </div>
+                                <div id="site-options" class="options-pane">
+                                    <h3>All games</h3>
+                                    <div class="option-row option-desktop checkbox">
+                                        <label title="Spread the cards in your hand wider, making it easier to hit the right card.">Spread cards<input type="checkbox" name="spreadCards"/><span></span></label>
+                                    </div>
+                                    <div class="option-row option-desktop checkbox appmode-remove">
+                                        <label title="Only show ads inbetween rounds in the games, never show ad banners on the sides.">Interstitial ads<input type="checkbox" name="alwaysUseInterstitialAds" /><span></span></label>
+                                    </div>
+                                    <div class="option-row checkbox">
+                                        <label title="Use a darker theme for the site, which can be easier on the eyes.">Use dark theme<input type="checkbox" name="useDarkTheme" /><span></span></label>
+                                    </div>
+                                    <div class="option-row checkbox">
+                                        <label title="Special holiday themes are active around holidays, like Christmas, Halloween and Easter.">Holiday themes<input type="checkbox" name="holidayThemes"/><span></span></label>
+                                    </div>
+                                    <div class="option-row checkbox">
+                                        <label title="Show confetti for special celebrations, like getting a perfect game in Hearts.">Confetti<input type="checkbox" name="confetti" /><span></span></label>
+                                    </div>
+                                    <div class="option-row checkbox">
+                                        <label title="Hide Multiplayer button when game is active.">Hide Multiplayer button<input type="checkbox" name="hideMultiplayerButton" /><span></span></label>
+                                    </div>
+                                    <div class="option-row">
+                                        <label title="Customize faces and names of opponents"><a href="/opponents/">Customize opponents...</a></label>
+                                    </div>
+                                    <div class="option-row hide-mobile">
+                                        <label title="Block or unblock players from Multiplayer mode"><a href="/blocklist/">Blocked users...</a></label>
+                                    </div>
+                                    <div class="option-row hide-mobile">
+                                        <label title="Manage your favorite players from Multiplayer mode"><a href="/favoritelist/">Favorite users...</a></label>
+                                    </div>
+                                </div>
+                                <div style="clear:both;"></div>
+                            </div>
+                            <small class="appmode-hide">Certain changes only take effect after refreshing the page.</small>
+                            <button id="close-options">Close</button>
+                        </div>
+                        <div id="win-screen">
+                            <h1>YOU WIN!!!</h1>
+                            <p id="win-record"></p>
+                            <a href="#newgame">Start a new game</a>
+                        </div>
+                    </div>
+              
+     
+       
+        <script type="text/javascript" src="../shared/lib/jquery-3.6.3.min.js"></script>
+        <script src="../spidersolitaire/3089/spidersolitaire.js"></script>
+
+
+    
+     
+  
+</main>
+
+</html>

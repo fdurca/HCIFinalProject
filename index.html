@@ -251,51 +251,120 @@ input[type="radio"] {
     <div>
       <h2 id="introduction">Executive Summary</h2>
       <p>
-        Many systems and interactions - social networks, molecules, organizations, citations, physical models, transactions - can be represented quite naturally as graphs.
-        How can we reason about and make predictions within these systems?
+        ‘Cardgames.io’ is an online gaming website which features over 30+ classic card and board games such as Chess, Solitaire, Backgammon, and more. It is an excellent casual site which lets users play against friends, computer opposition, and against a local leaderboard system.
       </p>
       <p>
-        One idea is to look at tools that have worked well in other domains: neural networks have shown immense predictive power in a variety of learning tasks.
-        However, neural networks have been traditionally used to operate on fixed-size and/or regular-structured inputs (such as sentences, images and video).
-        This makes them unable to elegantly process graph-structured data.
+        The platform is best enjoyed by a wide range of audiences who are looking for convenient and enjoyable gameplay. This is inclusive of children and older adults as well, as it is fairly easy to learn and supports generally simplistic controls.
       </p>
-      <figure id="standard-neural-networks" class="l-page">
-        <img src="images/standard-neural-networks.svg" style="width: 100%;"
-             alt="Neural networks generally operate on fixed-size input vectors. How do we input a graph to a neural network?"
-             title="How do we input a graph to a neural network?">
-      </figure>
+      <p>
+        Despite overall user satisfaction and the existing success of the platform, two limitations with the experience are the lack of flexibility for keyboard-based controls, and the information overload throughout the interface that makes site navigation and comprehension more challenging.
+      </p>
+      <p>
+        When playing games such as Solitaire and Sea Battles, players are prompted to use their mouse to interact with in-game components and perform any user action. This design disregards laptop users who may not have any auxiliary devices, and are instead restricted to using their built-in touchpad which can make for an uncomfortable experience.
+      </p>
+      <p>
+        Not only this, but in the event of a user wanting to switch to a different game, they must undertake a series of steps to first return to the home page, then proceed to clicking into a separate screen to understand its rules, and then finally begin gameplay. This can quickly become tedius and cause frustration among users who value the convenience of simplistic navigation.
+      </p>
+      <p>
+        After identifying these pain points in the current interface and usability, our group chose to revamp the experience if the cardgames.io website with the following new features:
+        <ul>
+          <li>
+            Clean and minimalistic UI design that is consistent throughout the homepage and numerous game pages.
+          </li>
+          <li>
+            Keyboard support for in-game controls including user actions and manipulation.
+          </li>
+          <li>
+            Hover-over descriptions to avoid the user having to click through each individual game for a quick preview.
+          </li>
+          <li>
+            Buttons to navigate to the next and previous from the available selection, as well as the option to toggle the ’shuffle’ feature
+          </li>
+          <li>
+            A sidebar menu to access each of the many games from the current page, no matter where the user navigates to.
+          </li>
+        </ul>
+      </p>
     </div>
-    
-    <p>
-      Graph neural networks (GNNs) are a family of neural networks that can operate naturally on graph-structured data. 
-      By extracting and utilizing features from the underlying graph,
-      GNNs can make more informed predictions about entities in these interactions,
-      as compared to models that consider individual entities in isolation.
-    </p>
-    <p>
-      GNNs are not the only tools available to model graph-structured data:
-      graph kernels <d-cite key="graph-kernels"></d-cite>
-      and random-walk methods <d-cite key="node2vec,deepwalk"></d-cite>
-      were some of the most popular ones.
-      Today, however, GNNs have largely replaced these techniques
-      because of their inherent flexibility to model the underlying systems
-      better.
-    </p>
-    <p>
-      In this article, we will illustrate
-      the challenges of computing over graphs, 
-      describe the origin and design of graph neural networks,
-      and explore the most popular GNN variants in recent times.
-      Particularly, we will see that many of these variants
-      are composed of similar building blocks.
-    </p>
-    <p>
-      First, let's discuss some of the complications that graphs come with.
-    </p>
 
     <h2 id="map">
       Navigational Map
     </h2>
+
+    <img src="images/Storyboard.jpg">
+
+    <p></p>
+
+    <p>
+      The user opens up the home page of cardgames.io on their laptop, which serves as the application’s landing page and consists of all the available games to play. By hovering over each game’s icon, the user is presented with more information about general gameplay, game rules, and the method of victory, which they can use to select the one they are most interested in.
+    </p>
+
+    <p>
+      Being indecisive on what game to play, the user then selects the all games tab from the navigation bar. With all the games listed on the screen, they use the drop down filter and apply a filter to list all of the single-player card games sorted by popularity, and select Solitaire as the first game to play.
+    </p>
+
+    <p>
+      Despite difficulty with the touchpad’s ‘drag-and-drop’ mechanism on the laptop, the user uses the new ‘single-click’ functionality to continue enjoying the game. With a single click from their mouse, the user is able to play the game without the conventional method of having to click a card and drag it across the screen. After finishing with Solitaire, the user selects the shuffle option and uses the right arrow to proceed to the next game in a random order.
+    </p>
+
+    <p>
+      After landing on Sea Battles, the user toggles the ‘enable-keyboard’ functionality through the options menu and chooses to use the general movement keys (the arrow keys) to highlight the cells, and uses ‘ENTER’ to select the cell. With the game now over, the user intentionally toggles off the shuffle function and clicks the right arrow in order to play the next game in alphabetical order.
+    </p>
+
+    <p>
+      Finally, the user reaches the Spades game page, where instead of the traditional mouse-based interaction, the player uses their keyboard (arrow keys or WASD) to shuffle the deck of cards and select an appropriate next move. They then use the general movement keys to select which deck and use the ‘ENTER’ key to select their card.
+    </p>
+
+    <h2 id="demos">
+      Demos
+    </h2>
+
+    <h3>
+      Spider Solitaire
+    </h3>
+    <iframe src="games/Filip-Spider Solitaire/spidersolitaire/index.html" height="610px" width="720px"  title="description"></iframe>
+    <p></p>
+    <p>
+      For Spider Solitaire, we added one click functionality. To move cards to different stacks before our redesign, the user had to click and drag between the piles. Now, the user is able to click on one stack to move it to another stack when it is a valid move. This helps with making the site more laptop and touchpad friendly.
+    </p>
+
+    <h3>
+      Sea Battle
+    </h3>
+    <iframe src="games/cookie-seabattle/seabattle.html" height="610px" width="720px"  title="description"></iframe>
+
+    <p></p>
+    <p>In Sea Battle, the added functionality was being able to traverse across the grid and fire at ships using the keyboard. The arrow keys will now let the user move around the opponents board and then when the user clicks enter, the user fires onto the selected square. This adds more efficiency and flexibility to the gameplay and makes it accessible for all users. </p>   
+    
+
+    <h3>
+      Spades
+    </h3>
+    <iframe src="games/cookie-spades/spadesgame.html" height="610px" width="720px"  title="description"></iframe>
+
+    <p></p>
+    <p>In Spades, the added functionality was keyboard control. This meant being able to click the "enter" key to deal cards. Then the user can click a numeric number to select the bid of their choosing. Finally the user can user the left and right arrow keys to naviagate throught their cards and then press enter to play the card of their choosing. This adds more efficiency and flexibility to the gameplay and makes it accessible for all users</p>
+
+    <h3>
+      Game Filtering
+    </h3>
+    <iframe src="images/filter.mp4" height="610px" width="720px"  title="description"></iframe>
+    
+    <p></p>
+    <p>
+      As part of our redesign, we have created a new landing page for the user to easily filter the game that they want to play. The user is able to filter on multiple different criteria simultaneously to easily pick the game they wish to play.
+    </p>
+
+    <h3>
+      Slide menu
+    </h3>
+    <iframe src="images/slidemenu.mp4" height="610px" width="720px"  title="description"></iframe>
+    
+    <p></p>
+    <p>
+      To assist with navigation, as part of our redesign we have added functionality that allows the user to switch between games quite easily by selecting the arrows on either side. They can peruse either alphabetically or with shuffle enabled, at random. As well, we have implemented a side menu to quickly navigate to the game of their choice.
+    </p>
+
 
     <h2 id="Design Principles">
       Design Principles
@@ -569,6 +638,10 @@ input[type="radio"] {
         <li>
           <h3>In-game tutorials</h3>
           Another feature would be adding in-game tutorials to each game on the site. These tutorials would be on the game page for each game. This would help inform the user and provide a better idea of how to play the game. This is more clear and helpful than providing documentation.
+        </li>
+        <li>
+          <h3>Personalization</h3>
+          Returning users should be able to log into their account and see a list of recently played games, existing high scores, and a selection of their individual preferences (favorite games, light/dark mode, keyboard or mouse controls and respective key bindings).
         </li>
       </ul>
     </p>
